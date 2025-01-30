@@ -181,7 +181,21 @@ const insertNewUser = async( email, first_name, last_name, password ) =>{
 }
 
 // i. that deletes a user based on its primary key.
+const deleteUser = async(id)=>{
+    let [data] = await pool.query('delete from users where id=?',[id])
+    return data
+}
 
+app.delete('/user/delete/:id', async(req,res)=>{
+    try{
+        const {id} = req.params
+        const result = await deleteUser(id);
+        res.status(200).json({ message: 'User deleted successfully', result });
+
+    }catch(error){
+        res.status(500).json({ message: 'Failed to delete User', error });
+    }
+})
 
 
 // api
